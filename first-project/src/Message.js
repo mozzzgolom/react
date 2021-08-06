@@ -1,9 +1,11 @@
-import styles from './style/Message.css'
+import styles from './style/Message.sass'
 
-export function Message(props) {
-  return(
+export function Message({ message: { text, author } }) {
+  return (
     <div className={styles.message}>
-      <p>{props.text}</p>
+      <p>
+        <span className={styles.author}>{author}</span>: {text}
+      </p>
     </div>
-  )
+  );
 }
