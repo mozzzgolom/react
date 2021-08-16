@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Grid, makeStyles } from "@material-ui/core"
-import { Chats } from "./component/Chats"
-import { MessageChat } from "./component/MessageChat/MessageChat.js"
+import { makeStyles } from "@material-ui/core"
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
+import { Chat } from "./Pages"
 
 const useStyles = makeStyles({
   app: {
@@ -13,14 +13,19 @@ export function App() {
   const classes = useStyles()
   return (
     <div className={classes.app}>
-      <Grid container={true}>
-        <Grid item={true} xs={12} md={3}>
-          <Chats />
-        </Grid>
-        <Grid item={true} xs={12} md={9}>
-          <MessageChat />
-        </Grid>
-      </Grid>
+      <BrowserRouter>
+        <Switch>
+          <Route exact={true} path="/">
+            <Redirect to="/chat" />
+          </Route>
+          <Route path="/chat">
+            <Chat />
+          </Route>
+          <Route path="*">
+            <h1>404</h1>
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   )
 }

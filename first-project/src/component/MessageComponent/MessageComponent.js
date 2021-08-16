@@ -1,4 +1,5 @@
 import { Paper, makeStyles } from "@material-ui/core"
+import { FormatDate } from "../../utils"
 
 const useStyles = makeStyles({
   message: {
@@ -30,18 +31,23 @@ const useStyles = makeStyles({
   },
 })
 
-export function Message({ message: { value, author } }) {
+export function MessageComponent({
+  message: { message, author, date = FormatDate(new Date()) },
+}) {
   const classes = useStyles()
   return (
     <Paper
-      className={`${classes.message} ${
-        author === "Valli" ? classes.messageIncoming : ""
+      className={`${classes.message} ${classes.sb1} ${
+        author !== "User" ? classes.messageIncoming : ""
       }`}
       elevation={3}
     >
-      <p className={classes.messageContent}>
-        <p className={classes.author}>{author}:</p> {value}
-      </p>
+      <div className={classes.messageContent}>
+        <p className={classes.author}>{author}:</p> <span>{message}</span>
+        <p className={classes.messageDate}>
+          <sub>{date}</sub>
+        </p>
+      </div>
     </Paper>
   )
 }

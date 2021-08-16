@@ -1,14 +1,14 @@
   
 import {
-    TextField,
-    InputAdornment,
-    IconButton,
-    makeStyles,
+  Paper,
+  TextField,
+  InputAdornment,
+  makeStyles,
+  Icon
   } from "@material-ui/core"
   import { Send } from "@material-ui/icons"
-  import { useState, useEffect } from "react"
-  import { Message } from "../Message/Message"
-  
+  import { useRef, useCallback, useEffect } from "react"
+  import { MessageComponent } from "../"  
   const useStyles = makeStyles({
     messageChat: {
       display: "flex",
@@ -29,63 +29,72 @@ import {
     },
   })
   
-  export const MessageChat = () => {
+  export const MessageChat = ({
+    messages,
+    currentInput,
+    handleInput,
+    sendMessage,
+  }) => {
     const classes = useStyles()
   
-    const [message, setMessage] = useState([])
-    const [value, setValue] = useState("")
+    const messageList = useRef(null)
   
-    const sendMessage = () => {
-      setMessage((messages) => [
-        ...messages,
-        { value, author: "User", id: Date.now() },
-      ])
-  
-      setValue("")
+    const handlePressInput = ({ code }) => {
+      if (code === "Enter") {
+        handleSendMessage()
+      }
     }
   
-    useEffect(() => {
-      if (
-        message.length &&
-        message[message.length - 1].author !== "Valli"
-      ) {
-        setTimeout(() => {
-          setMessage((messages) => [
-            ...messages,
-            { value: "Hello from Valli!", author: "Valli", id: Date.now() },
-          ])
-        }, 2000)
+    const handleSendMessage = () => {
+      if (currentInput)
+        sendMessage({
+          message: currentInput,
+          author: "User",
+        })
+    }
+  
+    const handleScrollBottom = useCallback(() => {
+      if (messageList.current) {
+        messageList.current.scrollTo(0, messageList.current.scrollHeight)
       }
-    }, [message])
+    }, [messageList])
+  
+    useEffect(() => {
+      handleScrollBottom()
+    }, [handleScrollBottom])
   
     return (
-      <>
-        <div className={classes.messageChat}>
-          {message.map((message) => (
-            <Message message={message} key={message.id} />
+      <div className={classes.wrapper}>
+        <div ref={messageList} className={classes.messageList}>
+          {messages.map((message) => (
+            <MessageComponent message={message} key={message.id} />
           ))}
         </div>
   
-        <div className={classes.messageForm}>
-          <TextField autoFocus
+        <Paper elevation={3} className={classes.messageForm}>
+          <TextField
             type="text"
             className={classes.messageInput}
             fullWidth={true}
-            label="Your Message"
-            variant="filled"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
+            placeholder="Write your message..."
+            value={currentInput}
+            onChange={(e) => handleInput(e)}
+            onKeyPress={handlePressInput}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={sendMessage} color="primary">
+                  <Icon
+                    className={classes.sendButton}
+                    onClick={handleSendMessage}
+                    color="primary"
+                  >
                     <Send />
-                  </IconButton>
+                  </Icon>
                 </InputAdornment>
               ),
             }}
           />
-        </div>
-      </>
+        </Paper>
+      </div>
     )
   }
