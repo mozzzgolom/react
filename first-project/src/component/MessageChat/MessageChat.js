@@ -7,8 +7,10 @@ import {
   Icon
   } from "@material-ui/core"
   import { Send } from "@material-ui/icons"
-  import { useRef, useCallback, useEffect } from "react"
-  import { MessageComponent } from "../"  
+  import { useRef, useCallback, useEffect } from "react" 
+  import { useSelector } from "react-redux"
+  
+  
   const useStyles = makeStyles({
     messageChat: {
       display: "flex",
@@ -38,6 +40,8 @@ import {
     const classes = useStyles()
   
     const messageList = useRef(null)
+
+     const userName = useSelector((state) => state.user.name)
   
     const handlePressInput = ({ code }) => {
       if (code === "Enter") {
@@ -49,7 +53,7 @@ import {
       if (currentInput)
         sendMessage({
           message: currentInput,
-          author: "User",
+          author: userName,
         })
     }
   
@@ -64,37 +68,37 @@ import {
     }, [handleScrollBottom])
   
     return (
-      <div className={classes.wrapper}>
-        <div ref={messageList} className={classes.messageList}>
-          {messages.map((message) => (
-            <MessageComponent message={message} key={message.id} />
-          ))}
-        </div>
-  
-        <Paper elevation={3} className={classes.messageForm}>
-          <TextField
-            type="text"
-            className={classes.messageInput}
-            fullWidth={true}
-            placeholder="Write your message..."
-            value={currentInput}
-            onChange={(e) => handleInput(e)}
-            onKeyPress={handlePressInput}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Icon
-                    className={classes.sendButton}
-                    onClick={handleSendMessage}
-                    color="primary"
-                  >
-                    <Send />
-                  </Icon>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Paper>
+    <div className={classes.wrapper}>
+      <div ref={messageList} className={classes.messageList}>
+        {messages.map((message) => (
+          <MessageChat message={message} key={message.id} />
+        ))}
       </div>
+
+      <Paper elevation={3} className={classes.messageForm}>
+        <TextField
+          type="text"
+          className={classes.messageInput}
+          fullWidth={true}
+          placeholder="Write your message..."
+          value={currentInput}
+          onChange={(e) => handleInput(e)}
+          onKeyPress={handlePressInput}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Icon
+                  className={classes.sendButton}
+                  onClick={handleSendMessage}
+                  color="primary"
+                >
+                  <Send />
+                </Icon>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Paper>
+    </div>
     )
   }

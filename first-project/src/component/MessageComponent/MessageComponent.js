@@ -1,5 +1,6 @@
 import { Paper, makeStyles } from "@material-ui/core"
 import { FormatDate } from "../../utils"
+import { useSelector } from "react-redux"
 
 const useStyles = makeStyles({
   message: {
@@ -35,10 +36,11 @@ export function MessageComponent({
   message: { message, author, date = FormatDate(new Date()) },
 }) {
   const classes = useStyles()
+  const userName = useSelector((state) => state.user.name)
   return (
     <Paper
       className={`${classes.message} ${classes.sb1} ${
-        author !== "User" ? classes.messageIncoming : ""
+        author !== userName ? classes.messageIncoming : ""
       }`}
       elevation={3}
     >

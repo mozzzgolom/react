@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core"
 import { Group } from "@material-ui/icons"
 import { Link, useParams } from "react-router-dom"
+import { Profile } from ".."
 
 const useStyles = makeStyles({
   wrapper: {
@@ -23,6 +24,7 @@ export const Chats = ({ conversations }) => {
 
   return (
     <List component="nav" className={classes.wrapper}>
+    <Profile />
       {conversations.map((chat) => {
         return (
           <Link key={chat.id} to={`/chat/${chat.id}`}>
