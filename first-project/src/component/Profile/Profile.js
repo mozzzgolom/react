@@ -16,6 +16,7 @@ import { Close, AccountCircle } from "@material-ui/icons"
 import React, { useState, useCallback } from "react"
 import { useSelector } from "react-redux"
 import { ProfileForm } from "../"
+import { getUserInfo } from "../../store/profile"
 
 const useStyles = makeStyles({
   paper: {
@@ -55,7 +56,7 @@ const useStyles = makeStyles({
 export const Profile = () => {
   const classes = useStyles()
 
-  const { age, name, phone } = useSelector((state) => state.user)
+  const { age, name, phone } = useSelector(getUserInfo)
 
   const [openProfile, setOpenProfile] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
@@ -135,7 +136,7 @@ export const Profile = () => {
         }}
       >
         <Fade in={openEdit}>
-          <ProfileForm triggerCloseForm={handleEditClose} />
+          <ProfileForm handleEditClose={handleEditClose} />
         </Fade>
       </Modal>
     </div>
